@@ -100,8 +100,15 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
 
   totalPagesBinding: "meta.total_pages",
 
+  lastPage: null, 
+
   pageChanged: function() {
-    this.set("promise", this.fetchContent());
+    var page = this.get('page');
+    var lastPage = this.get('lastPage');
+    if (lastPage != page) {
+      this.set('lastPage', page);
+      this.set("promise", this.fetchContent());
+    }
   }.observes("page", "perPage"),
 
   lockToRange: function() {
